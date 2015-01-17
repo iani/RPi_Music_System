@@ -8,7 +8,7 @@
       
 ** REMOVE OLD JACK AND SUPERCOLLIDER
    
-   For a clean install:
+   For a clean install:\n
      sudo apt-get remove jackd
      sudo apt-get autoremove
 
