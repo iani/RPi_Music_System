@@ -40,7 +40,7 @@ Then save, exit and run the command:
 
 : node node-server.js
 
-Open up a browser and type in the address bar the raspberry's ip and the port (in this case 8080) like so:
+Open up a browser and type in the address bar the raspberry's IP and the port (in this case 8080) like so:
 =192.168.1.x:8080=
 
 If everything is ok, you should see the message =Hello, RaspberryPi=.
@@ -51,7 +51,7 @@ If everything is ok, you should see the message =Hello, RaspberryPi=.
 : cd sc-kubrik/webosc
 : emacs config.json
 
-In this file you should change the osc out port to be 57120 (the port which sclang listens to). You could also change the ip if you are sending in a remote machine.
+In this file you should change the osc out port to be 57120 (the port which sclang listens to). You could also change the IP if you are sending in a remote machine.
   
 : cd public/js
 : emacs script.js
@@ -75,7 +75,9 @@ Now open a new terminal and start supercollider. To receive the osc messages, cr
 ** READINGS
 
 http://nodejs.org/dist/latest/
+
 http://elinux.org/Node.js_on_RPi
+
 https://www.youtube.com/watch?v=J6g53Hm0rq4
+
 http://stackoverflow.com/questions/11696162/node-js-install-synology-ds212-error
-  
