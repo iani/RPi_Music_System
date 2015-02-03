@@ -5,7 +5,7 @@ http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
 
 ** CONFIGURE THE WIRELESS ADAPTER WITH A STATIC IP ADDRESS
 
-Edit "/etc/network/interfaces" (the part about WAN) like this:
+Edit =/etc/network/interfaces= (the part about WAN) like this:
 
 #+BEGIN_SRC sh
 # WAN settings
@@ -67,7 +67,7 @@ subnet 192.168.42.0 netmask 255.255.255.0 {
 }
 #+END_EXAMPLE
 
-To make the wireless adapter the default for the DHCP request, edit the file "/etc/default/isc-dhcp-server"
+To make the wireless adapter the default for the DHCP request, edit the file =/etc/default/isc-dhcp-server=
 
 Change the line that reads
 : INTERFACES=""
@@ -127,7 +127,7 @@ Run the following command to enable forwarding for now:
 
 : sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
 
-Run the following commands t turn the Pi into a router:
+Run the following commands to turn the Pi into a router:
 
 : sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 : sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -145,13 +145,13 @@ Open the file =/etc/network/interfaces= and add this line to the end of the file
 
 I have tested the next steps with the usb wi-fi dongle DWA-131.
 
-At this point everything should work, but only if your usb wi-fi dongle uses the "nl80211". To check out, use the command:
+At this point everything should work, but only if your usb wi-fi dongle uses the "nl80211" driver. To check out, use the command:
 
 : iw list
 
 If the output is =nl80211 not found=, then you need to use the "rtl871xdrv" driver.
 
-Open the file =/etc/hostapd/hostapd.conf= and comment out the line about the =nl80211= driver. Then uncomment the line about the =rtl871xdrv= driver.
+Open the file =/etc/hostapd/hostapd.conf= and comment out the line about the "nl80211" driver. Then uncomment the line about the "rtl871xdrv" driver.
 
 You will also need a special version of hostapd, which you can get from Adafruit (http://www.adafruit.com):
 
