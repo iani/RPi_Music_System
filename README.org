@@ -13,6 +13,7 @@ The project is divided in three sections, presented separately:
 Topics also covered:
 
     - Basic Raspberry Pi configuration
+    - Confrontation of some basic errors regarding SuperCollider usage in a non-graphical environment
     - Remote access to the Raspberry Pi with SSH
 
 * ELECTRONIC RESOURCES
