@@ -1,141 +1,159 @@
 * SET UP RASPBERRY PI AS A WIRELESS ACCESS POINT (HOTSPOT)
-  
-  (The following instructions come this tutorial:
-  http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/)
+
+  The instructions here are from the tutorial found here:
+  http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
 
 ** CONFIGURE THE WIRELESS ADAPTER WITH A STATIC IP ADDRESS
 
    Edit "/etc/network/interfaces" (the part about WAN) like this:
 
-     # WAN settings
+#+BEGIN_SRC sh
+# WAN settings
 
-     allow-hotplug wlan0
+allow-hotplug wlan0
 
-     iface wlan0 inet static
-          address 192.168.42.1
-          netmask 255.255.255.0
-          gateway 192.168.1.1
+iface wlan0 inet static
+    address 192.168.42.1
+    netmask 255.255.255.0
+    gateway 192.168.1.1
 
-     #auto wlan0
-     #iface wlan0 inet manual
-     #wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
-     #iface default inet dhcp
+#auto wlan0
+#iface wlan0 inet manual
+#wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+#iface default inet dhcp
+#+END_SRC
 
-   Now reboot.
+
+Now reboot.
 
 ** INSTALL AND CONFIGURE A DHCP SERVER
 
-   Install the DHCP server:
+Install the DHCP server:
 
-     sudo apt-get install isc-dhcp-server
+:     sudo apt-get install isc-dhcp-server
 
-   Ignore the error message at the end.
+Ignore the error message at the end.
 
-   Now edit the configuration file:
+Now edit the configuration file:
 
-     sudo nano /etc/dhcp/dhcpd.conf
+:     sudo nano /etc/dhcp/dhcpd.conf
 
-   Comment out the lines about "option doamin-name":
+Comment out the lines about "option doamin-name":
 
-     #option domain-name "example.org";
-     #option domain-name-servers ns1.example.org, ns2.example.org;
+:     #option domain-name "example.org";
+:     #option domain-name-servers ns1.example.org, ns2.example.org;
 
-   Uncomment the "authoritative;" statement:
+Uncomment the "authoritative;" statement:
 
-     # If this DHCP server is the official DHCP server for the local
-     # network, the authoritative directive should be uncommented.
-     authoritative;
+:     # If this DHCP server is the official DHCP server for the local
+:     # network, the authoritative directive should be uncommented.
+:     authoritative;
 
-   Also, add the following at the end of the file:
+Also, add the following at the end of the file:
 
-     subnet 192.168.42.0 netmask 255.255.255.0 {
-     range 192.168.42.10 192.168.42.50;
-     option broadcast-address 192.168.42.255;
-     option routers 192.168.42.1;
-     default-lease-time 600;
-     max-lease-time 7200;
-     option domain-name "local";
-     option domain-name-servers 8.8.8.8, 8.8.4.4;
-     }
+#+BEGIN_EXAMPLE
 
-   To make the wireless adapter the default for the DHCP request, edit the file "/etc/default/isc-dhcp-server"
+subnet 192.168.42.0 netmask 255.255.255.0 {
+    range 192.168.42.10 192.168.42.50;
+    option broadcast-address 192.168.42.255;
+    option routers 192.168.42.1;
+    default-lease-time 600;
+    max-lease-time 7200;
+    option domain-name "local";
+    option domain-name-servers 8.8.8.8, 8.8.4.4;
+}
 
-   Change " INTERFACES="" " to " INTERFACES="wlan0" "
+#+END_EXAMPLE
+To make the wireless adapter the default for the DHCP request, edit the file "/etc/default/isc-dhcp-server"
+
+Change " INTERFACES="" " to " INTERFACES="wlan0" "
 
 ** INSTALL AND CONFIGURE THE ACCESS POINT DAEMON
+:PROPERTIES:
+:ID:       1270B1BC-41BC-47A1-BBDC-B9ECBA4AF616
+:eval-id:  2
+:END:
 
-   Install hostapd:
+Install hostapd:
 
-     sudo apt-get install hostapd
+:     sudo apt-get install hostapd
 
-   Edit the hostapd configuration to create a wireless network (if the file doesn't exist, create it):
+Edit the hostapd configuration to create a wireless network (if the file doesn't exist, create it):
 
-     sudo nano /etc/hostapd/hostapd.conf
+:     sudo nano /etc/hostapd/hostapd.conf
 
-   Add the following lines:
+Add the following lines:
 
-     interface=wlan0
-     driver=nl80211
-     #driver=rtl871xdrv
-     ssid=My_Network
-     hw_mode=g
-     channel=6
-     macaddr_acl=0
-     auth_algs=1
-     ignore_broadcast_ssid=0
-     wpa=2
-     wpa_passphrase=My_Passphrase
-     wpa_key_mgmt=WPA-PSK
-     wpa_pairwise=TKIP
-     rsn_pairwise=CCMP
+#+BEGIN_SRC sh
+interface=wlan0
+driver=nl80211
+#driver=rtl871xdrv
+ssid=My_Network
+hw_mode=g
+channel=6
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=My_Passphrase
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+#+END_SRC
 
-   This will create a network called "My_Network" on channel 6 with password "My_Passphrase".
-   Note also the commented out "driver" line. We will come back to this later. 
+This will create a network called "My_Network" on channel 6 with password "My_Passphrase".
+Note also the commented out "driver" line. We will come back to this later.
 
-   Edit the file "/etc/default/hostapd":
-   Uncomment the line about DAEMON_CONF and edit it as such:
+Edit the file =/etc/default/hostapd=:
 
-     DAEMON_CONF="/etc/hostapd/hostapd.conf"
+Uncomment the line about DAEMON_CONF and edit it as follows:
+
+:      DAEMON_CONF="/etc/hostapd/hostapd.conf"
 
 ** CONFIGURE IP ROUTING BETWEEN WIRELESS AND ETHERNET
 
-   Edit the file "/etc/sysctl.conf" to enable IP forwarding:
-   Uncomment the line which reads "net.ipv4.ip_forward=1"
+Edit the file "/etc/sysctl.conf" to enable IP forwarding:
 
-   Run the following command to enable forwarding for now:
+Uncomment the line which reads "net.ipv4.ip_forward=1"
 
-     sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+Run the following command to enable forwarding for now:
 
-   Run the following commands t turn the Pi into a router:
+:     sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
 
-     sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-     sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-     sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
+Run the following commands t turn the Pi into a router:
 
-   Then, save the routing tables into the file "/etc/iptables.ipv4.nat":
+:     sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+:     sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+:     sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
 
-     sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+Then, save the routing tables into the file "/etc/iptables.ipv4.nat":
 
-   Open the file "/etc/network/interfaces" and add this line to the end of the file:
+:     sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 
-     pre-up iptables-restore < /etc/iptables.ipv4.nat
+Open the file "/etc/network/interfaces" and add this line to the end of the file:
+
+:     pre-up iptables-restore < /etc/iptables.ipv4.nat
 
 ** USE THE CORRECT DRIVERS FOR YOUR USB WI-FI DONGLE
 
-   (I tested the next steps with the usb wi-fi dongle DWA-131)
+(I tested the next steps with the usb wi-fi dongle DWA-131)
 
-   At this point everything should work, but only if your usb wi-fi dongle uses the "nl80211". To check out, use the command:
+At this point everything should work, but only if your usb wi-fi dongle uses the "nl80211". To check out, use the command:
 
-     iw list
+:     iw list
 
-   If the output is "nl80211 not found", then you need to use the "rtl871xdrv" driver.
-   Open the file "/etc/hostapd/hostapd.conf" and comment out the line about the "nl80211" driver. Then uncomment the line about the "rtl871xdrv" driver.
-   You will also need a special version of hostapd, which you can get from Adafruit (http://www.adafruit.com):
+If the output is "nl80211 not found", then you need to use the "rtl871xdrv" driver.
 
-     wget http://www.adafruit.com/downloads/adafruit_hostapd.zip 
-     unzip adafruit_hostapd.zip 
-     sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG # backup the original hostapd file 
-     sudo mv hostapd /usr/sbin
-     sudo chmod 755 /usr/sbin/hostapd
+Open the file "/etc/hostapd/hostapd.conf" and comment out the line about the "nl80211" driver. Then uncomment the line about the "rtl871xdrv" driver.
 
-   Reboot the Raspberry Pi and now you should be able to use it as a hotspot.
+You will also need a special version of hostapd, which you can get from Adafruit (http://www.adafruit.com):
+
+#+BEGIN_SRC sh
+wget http://www.adafruit.com/downloads/adafruit_hostapd.zip
+unzip adafruit_hostapd.zip
+sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG # backup the original hostapd file
+sudo mv hostapd /usr/sbin
+sudo chmod 755 /usr/sbin/hostapd
+#+END_SRC
+
+Reboot the Raspberry Pi and now you should be able to use it as a hotspot.
