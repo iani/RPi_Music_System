@@ -16,9 +16,11 @@ Topics also covered:
     - Confrontation of some basic errors regarding SuperCollider usage in a non-graphical environment
     - Remote access to the Raspberry Pi with SSH
 
+This project's goal is to create an out-of-the-box, cheap and lightweight musical system with interactive capabilities regarding musical improvisation. The sound source is SuperCollider, which runs on the Raspberry Pi. By using node.js to create a browser-based OSC controller, any device with network access can be used as a music controller by sending OSC messages to the SuperCollider server. Given the fact that most people own such portable devices, the participation in such an improvisation, whenever or wherever it takes place, can be really easy and spontaneous.
+
 * ELECTRONIC RESOURCES
 
-Here are all the resources that I used for this project, from all three sections:
+Here are all the resources that I used for this project, for all three sections:
 
 http://www.raspberrypi.org/documentation/installation/installing-images/
 
