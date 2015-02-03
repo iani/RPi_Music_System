@@ -1,39 +1,41 @@
 * INSTALL SUPERCOLLIDER 3.7 ALPHA IN RASPBERRY PI WITH EMACS SUPPORT
   
 ** INSTALL AND CONFIGURE RASPBIAN OS
-   
+
 To install Raspbian OS using a micro SD card, follow the instructions found in the Raspberry Pi site:
     http://www.raspberrypi.org/documentation/installation/installing-images/
    
 First of all, when the =raspi-config= screen shows up, check the localization options.  You should probably change the timezone but more important is the keyboard layout.  Find one that matches (if you dont find the exact keyboard select one of generic 101, 102 etc.) and then change the layout to English (US) because the default is English (UK).
-      
+
 ** REMOVE OLD JACK AND SUPERCOLLIDER
-   
+
 First of all, you have to remove the pre-installed jack and supercollider, to ensure a clean installation:
 
 : sudo apt-get remove jackd
 : sudo apt-get autoremove
 
 ** INSTALL BUILD LIBRARIES AND SUPERCOLLIDER AND EMACS DEPENDENCIES
-   
+
 Install supercollider dependencies:
 
 : sudo apt-get install cmake libasound2-dev libsamplerate0-dev libsndfile1-dev libavahi-client-dev libicu-dev libreadline-dev libfftw3-dev libxt-dev
-   
+
 Install emacs dependencies:
 
 : sudo apt-get install build-essential
-     
+
 Optional dependencies (for x-window and jpeg, gif, tiff support - mostly if you intend to use emacs with a graphical interface):
 
 : sudo apt-get install libgtk2.0-dev libxpm-dev libjpeg-dev libgif-dev libtiff4-dev
-   
+
 Alternatively to the last step you could get dependencies from a previous emacs version (I haven't try this, but it seems like a good idea):
 
 : sudo apt-get build-dep emacs23
-   
+
+Finally do:
+
 : sudo ldconfig
-   
+
 Install gcc-4.7:
 
 #+BEGIN_SRC sh
@@ -119,6 +121,7 @@ Because we run supercollider without a graphical interface, there is a harmless 
 The files that need renaming are:
 
 =<ClassLibraryDir>/Common/GUI/PlusGUI/Conrtol/FreqScope.sc -> .FreqScope.sc=
+
 =<ClassLibraryDir>/Common/GUI/PlusGUI/Math/PlotView.sc -> .PlotView.sc=
    
 The name doesn't really matter, as long as they are not seen by SuperCollider. I used the =.= prefix because it just makes the file hidden.
@@ -290,9 +293,15 @@ This is my emacs init file, made from bits and pieces gathered from the web. The
 ** SOURCES AND READINGS
 
 http://www.raspberrypi.org/documentation/installation/installing-images/
+
 http://supercollider.github.io/development/building-raspberrypi.html
+
 http://sourceforge.net/p/supercollider/supercollider/ci/master/tree/editors/scel/
+
 http://doc.sccode.org/Classes/Server.html
+
 http://chrisperkins.blogspot.gr/2011/07/building-emacs-24.html
+
 http://ergoemacs.org/emacs/building_emacs_on_linux.html
+
 https://www.gnu.org/software/emacs/manual/html_node/emacs/
