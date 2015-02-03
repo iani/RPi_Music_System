@@ -2,166 +2,201 @@
   
 ** INSTALL AND CONFIGURE RASPBIAN OS
    
-   To install Raspbian OS using a micro SD card, follow the instructions in the Raspberry Pi site.
+To install Raspbian OS using a micro SD card, follow the instructions found in the Raspberry Pi site:
+    http://www.raspberrypi.org/documentation/installation/installing-images/
    
-   First of all, when the raspi-config screen shows up, check the localization options.  You should probably change the timezone but more important is the keyboard layout.  Find one that matches (if you dont find the exact keyboard select one of generic 101, 102 etc.) and then change the layout to English (US) because the default is English (UK).
+First of all, when the =raspi-config= screen shows up, check the localization options.  You should probably change the timezone but more important is the keyboard layout.  Find one that matches (if you dont find the exact keyboard select one of generic 101, 102 etc.) and then change the layout to English (US) because the default is English (UK).
       
 ** REMOVE OLD JACK AND SUPERCOLLIDER
    
-   For a clean install:
-     sudo apt-get remove jackd
-     sudo apt-get autoremove
+First of all, you have to remove the pre-installed jack and supercollider, to ensure a clean installation:
+
+: sudo apt-get remove jackd
+: sudo apt-get autoremove
 
 ** INSTALL BUILD LIBRARIES AND SUPERCOLLIDER AND EMACS DEPENDENCIES
    
-   Supercollider dependencies:
-     sudo apt-get install cmake libasound2-dev libsamplerate0-dev libsndfile1-dev libavahi-client-dev libicu-dev libreadline-dev libfftw3-dev libxt-dev
+Install supercollider dependencies:
+
+: sudo apt-get install cmake libasound2-dev libsamplerate0-dev libsndfile1-dev libavahi-client-dev libicu-dev libreadline-dev libfftw3-dev libxt-dev
    
-   Emacs dependencies:
-     sudo apt-get install build-essential
+Install emacs dependencies:
+
+: sudo apt-get install build-essential
      
-   Optional (for x-window and jpeg, gif, tiff support):
-     sudo apt-get install libgtk2.0-dev libxpm-dev libjpeg-dev libgif-dev libtiff4-dev
+Optional dependencies (for x-window and jpeg, gif, tiff support - mostly if you intend to use emacs with a graphical interface):
+
+: sudo apt-get install libgtk2.0-dev libxpm-dev libjpeg-dev libgif-dev libtiff4-dev
    
-   Alternatively to the last step you could get dependencies from a previous emacs version (I haven't try this, but it seems like a good idea):
-     sudo apt-get build-dep emacs23
+Alternatively to the last step you could get dependencies from a previous emacs version (I haven't try this, but it seems like a good idea):
+
+: sudo apt-get build-dep emacs23
    
-     sudo ldconfig
+: sudo ldconfig
    
-   Install gcc-4.7:
-     sudo apt-get install gcc-4.7 g++-4.7
-     sudo apt-get remove --auto-remove gcc-4.6
-     sudo ln -s /usr/bin/gcc-4.7 /usr/bin/gcc
-     sudo ln -s /usr/bin/g++-4.7 /usr/bin/g++
-     sudo apt-get clean
-   
+Install gcc-4.7:
+
+#+BEGIN_SRC sh
+sudo apt-get install gcc-4.7 g++-4.7
+sudo apt-get remove --auto-remove gcc-4.6
+sudo ln -s /usr/bin/gcc-4.7 /usr/bin/gcc
+sudo ln -s /usr/bin/g++-4.7 /usr/bin/g++
+sudo apt-get clean
+#+END_SRC
+
 ** INSTALL JACK2 FROM GITHUB
 
-   git clone git://github.com/jackaudio/jack2.git
-   cd jack2
-   ./waf configure --alsa
-   ./waf build # this takes a while
-   sudo ./waf install
-   sudo ldconfig
-   sudo reboot
-   
+#+BEGIN_SRC sh
+git clone git://github.com/jackaudio/jack2.git
+cd jack2
+./waf configure --alsa
+./waf build # this takes a while
+sudo ./waf install
+sudo ldconfig
+sudo reboot
+#+END_SRC
+
 ** DOWNLOAD AND BUILD EMACS 24.4
    
-   There are some other options, like git install, but I did it by downloading the source tarball:
-     wget http://mirror.team-cymru.org/gnu/emacs/emacs-24.4.tar.gz
-     tar xvf emacs-24.4.tar.gz
-     cd emacs-24.4
-     ./configure
-     make # this takes a long time
-     sudo make install
-     sudo reboot
+There are some other options, like git install, but I did it by downloading the source tarball:
 
-   Open emacs, just to be shure everything is ok.
+#+BEGIN_SRC sh
+wget http://mirror.team-cymru.org/gnu/emacs/emacs-24.4.tar.gz
+tar xvf emacs-24.4.tar.gz
+cd emacs-24.4
+./configure
+make # this takes a long time
+sudo make install
+sudo reboot
+#+END_SRC
+
+Open emacs, just to be shure everything is ok.
    
 ** DOWNLOAD AND BUILD SUPERCOLLIDER 3.7 ALPHA WITH EMACS SUPPORT
-   
-   git clone --recursive git://github.com/supercollider/supercollider.git supercollider
-   cd supercollider
-   git checkout ddd8c8d75dd00263acf593b062ecbb06686a4574 # need an older version that still can use gcc - Note that you don't need to type the whole code, just the 7-10 first characters should be ok.
-   git submodule init && git submodule update
-   mkdir build && cd build
-   sudo dd if=/dev/zero of=/swapfile bs=1MB count=512 # create a temporary swap file
-   sudo mkswap /swapfile
-   sudo swapon /swapfile
-   cmake -L -DCMAKE_BUILD_TYPE="Release" -DBUILD_TESTING=OFF -DSSE=OFF -DSSE2=OFF -DSUPERNOVA=OFF -DNOVA_SIMD=ON -DNATIVE=OFF -DSC_QT=OFF -DSC_WII=OFF -DSC_ED=OFF -DSC_IDE=OFF -DSC_VIM=OFF -DSC_EL=ON -DCMAKE_C_FLAGS="-march=armv6 -mtune=arm1176jzf-s -mfloat-abi=hard -mfpu=vfp" -DCMAKE_CXX_FLAGS="-march=armv6 -mtune=arm1176jzf-s -mfloat-abi=hard -mfpu=vfp" ..
-   make # this takes HOURS - don't worry if it stays in 4% for 1 or 2 hours
-   sudo make install
-   sudo swapoff /swapfile
-   sudo rm /swapfile
-   sudo ldconfig
-   echo "export SC_JACK_DEFAULT_INPUTS=\"system\"" >> ~/.bashrc
-   echo "export SC_JACK_DEFAULT_OUTPUTS=\"system\"" >> ~/.bashrc
-   sudo reboot
+
+#+BEGIN_SRC sh
+git clone --recursive git://github.com/supercollider/supercollider.git supercollider
+cd supercollider
+git checkout ddd8c8d75dd00263acf593b062ecbb06686a4574 # need an older version that still can use gcc - Note that you don't need to type the whole code, just the 7-10 first characters should be ok.
+git submodule init && git submodule update
+mkdir build && cd build
+sudo dd if=/dev/zero of=/swapfile bs=1MB count=512 # create a temporary swap file
+sudo mkswap /swapfile
+sudo swapon /swapfile
+cmake -L -DCMAKE_BUILD_TYPE="Release" -DBUILD_TESTING=OFF -DSSE=OFF -DSSE2=OFF -DSUPERNOVA=OFF -DNOVA_SIMD=ON -DNATIVE=OFF -DSC_QT=OFF -DSC_WII=OFF -DSC_ED=OFF -DSC_IDE=OFF -DSC_VIM=OFF -DSC_EL=ON -DCMAKE_C_FLAGS="-march=armv6 -mtune=arm1176jzf-s -mfloat-abi=hard -mfpu=vfp" -DCMAKE_CXX_FLAGS="-march=armv6 -mtune=arm1176jzf-s -mfloat-abi=hard -mfpu=vfp" ..
+make # this takes HOURS - don't worry if it stays in 4% for 1 or 2 hours
+sudo make install
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo ldconfig
+echo "export SC_JACK_DEFAULT_INPUTS=\"system\"" >> ~/.bashrc
+echo "export SC_JACK_DEFAULT_OUTPUTS=\"system\"" >> ~/.bashrc
+sudo reboot
+#+END_SRC
 
 ** TEST JACK, SCSYNTH AND SCLANG
 
-    jackd -dalsa -dhw:0,0 -r44100 -n3 &
-    scsynth -u 57110 &
-    sclang
+: jackd -dalsa -dhw:0,0 -r44100 -n3 &
+: scsynth -u 57110 &
+: sclang
 
-  and in sclang:
-    s.boot;
-    x = { WhiteNoise.ar(0.3)!2 }.play;
-    x.free;
-    s.quit;
-    0.exit;
+and in sclang:
 
-  If there is sound coming out, everything works (so far).
+: s.boot;
+: x = { WhiteNoise.ar(0.3)!2 }.play;
+: x.free;
+: s.quit;
+: 0.exit;
+
+If there is sound coming out, everything works (so far).
 
 ** FIX ERROR: NO GUI SCHEME ACTIVE
    
-   Because we run supercollider without a graphical interface, there is a harmless (but annoying) error regarding GUI when starting sclang.  To fix this you need to rename 2 files from the SC class library.  You can locate your class library by executing in sclang:
-     Platform.classLibraryDir
+Because we run supercollider without a graphical interface, there is a harmless (but annoying) error regarding GUI when starting sclang. To fix this you need to rename 2 files from the SC class library. You can locate your class library by executing in sclang:
+
+: Platform.classLibraryDir
    
-   The files that need renaming are:
-   /<ClassLibraryDir>/Common/GUI/PlusGUI/Conrtol/FreqScope.sc -> .FreqScope.sc
-   /<ClassLibraryDir>/Common/GUI/PlusGUI/Math/PlotView.sc -> .PlotView.sc
-   The name doesn't really matter, as long as they are not seen by SuperCollider. I used the <.> prefix because it just makes the file hidden.
+The files that need renaming are:
+
+=<ClassLibraryDir>/Common/GUI/PlusGUI/Conrtol/FreqScope.sc -> .FreqScope.sc=
+=<ClassLibraryDir>/Common/GUI/PlusGUI/Math/PlotView.sc -> .PlotView.sc=
+   
+The name doesn't really matter, as long as they are not seen by SuperCollider. I used the =.= prefix because it just makes the file hidden.
 
 ** SCLANG MODE IN EMACS
    
-   To use sclang in emacs, you have to add this line to your init file:
-     (require 'sclang)
+To use sclang in emacs, you have to add this line to your init file:
 
-   Add also this line to automatically open .scd files in sclang mode:
-     (setq auto-mode-alist (cons '("\\.scd$" . sclang-mode) auto-mode-alist))
+: (require 'sclang)
 
-   Now you can start emacs in sclang mode with the command:
-     emacs -sclang
+Add also this line to automatically open .scd files in sclang mode:
 
-   Or within emacs:
-     M-x sclang-start
+: (setq auto-mode-alist (cons '("\\.scd$" . sclang-mode) auto-mode-alist))
+
+Now you can start emacs in sclang mode with the command:
+
+: emacs -sclang
+
+Or within emacs:
+
+: M-x sclang-start
 
 ** FIX ERROR: SERVER FAILED TO START
 
-   For some reason, when starting emacs -sclang and then trying to boot the server, you always get: ERROR: server failed to start. To avoid this, you have to start jack and scsynth before starting emacs -sclang.
+For some reason, when starting emacs -sclang and then trying to boot the server, you always get an error: =ERROR: server failed to start=. To avoid this, you have to start jack and scsynth before starting emacs -sclang.
    
-   However, because like that the server starts from the command line, the default group is not initialized, so we have to do this manually.
-   But, to avoid doing this every time we open sclang, we will use the startup.scd file, which is called when starting sclang.
-   To open the startup file, evaluate whithin sclang (in emacs):
-     (Platform.userConfigDir +/+ "startup.scd").openDocument;
-   
-   If the directory doesn't exist, you will be prompted by emacs to create it.
-   In the new file add the following line:
-     Server.default.initTree;
+However, because like that the server starts from the command line, the default group is not initialized, so we have to do this manually.
+But, to avoid doing this every time we open sclang, we will use the =startup.scd= file, which is called when starting sclang.
+To open the startup file, evaluate whithin sclang (in emacs):
 
-   Save the file and quit emacs.
+: (Platform.userConfigDir +/+ "startup.scd").openDocument;
+   
+If the directory doesn't exist, you will be prompted by emacs to create it.
+
+In the new file add the following line:
+
+: Server.default.initTree;
+
+Save the file and quit emacs.
 
 ** FINALLY: RUN SUPERCOLLIDER IN EMACS
 
-   Start jack, then scsynth and then emacs -sclang:
-     jackd -dalsa -dhw:0,0 -r44100 -n3 & # change -dhw:0,0 to -dhw:1,0 if you are using a usb audio interface
-     scsynth -u 57110 &
-     emacs -sclang
+Start jack, then scsynth and then emacs -sclang:
 
-   Note that you don't have to do <Server.default.boot> as the server is already running.
-   Just run your test white noise:
-     x = { WhiteNoise.ar(0.2)!2 }.play;
-     x.free;
+#+BEGIN_SRC sh
+jackd -dalsa -dhw:0,0 -r44100 -n3 & # change -dhw:0,0 to -dhw:1,0 if you are using a usb audio interface
+scsynth -u 57110 &
+emacs -sclang
+#+END_SRC
 
-   That's pretty much it... There are a lot of possibilities, like installing some packages with ELPA to facilitate editing, like smartparens or yasnippets. It's up to you.
+Note that you don't have to evaluate =Server.default.boot= as the server is already running.
+
+Just run your test white noise:
+
+: x = { WhiteNoise.ar(0.2)!2 }.play;
+: x.free;
 
 ** EXTRA: RUN SUPERCOLLIDER THROUGH SSH
 
-   You can use the process mentioned above through ssh to use SuperCollider from a remote system. However, you may run into an error when starting sclang:
+You can use the process mentioned above through ssh to use SuperCollider from a remote system. However, you may run into an error when starting sclang:
 
-     terminate called after throwing an instance of 'std::runtime_error'
-     what(): locale::facet::_S_create_c_locale name not valid
+: terminate called after throwing an instance of 'std::runtime_error'
+: what(): locale::facet::_S_create_c_locale name not valid
    
-   If that's the case, close emacs and run in terminal:
-     echo "export LC_ALL=C" >> ~/.bashrc
-     sudo reboot
+If that's the case, close emacs and run in terminal:
 
-   Then, login again with ssh and it should work.
-   Don't forget to kill jack before terminating ssh session, because there will be conflicts the next time you try to start jack.
+: echo "export LC_ALL=C" >> ~/.bashrc
+: sudo reboot
+
+Then, login again with ssh and it should work.
+
+Don't forget to kill jack before terminating ssh session, because there will be conflicts the next time you try to start jack.
 
 ** EXTRA: MY INIT FILE
 
+This is my emacs init file, made from bits and pieces gathered from the web. There are plenty of stuff to get you started.
+
+#+BEGIN_SRC emacs-lisp
 ;;=============== BASIC CONFIGURATION ===============
 
 ;;-- load default directory with subdirectories
@@ -250,14 +285,14 @@
 
 ;;-- open .scd files with sclang mode and auto complete
 (setq auto-mode-alist (cons '("\\.scd$" . sclang-mode) auto-mode-alist))
+#+END_SRC
 
 ** SOURCES AND READINGS
 
-   http://www.raspberrypi.org/documentation/installation/installing-images/README.md
-   http://supercollider.github.io/development/building-raspberrypi.html
-   http://sourceforge.net/p/supercollider/supercollider/ci/master/tree/editors/scel/
-   http://doc.sccode.org/Classes/Server.html
-   http://chrisperkins.blogspot.gr/2011/07/building-emacs-24.html
-   http://ergoemacs.org/emacs/building_emacs_on_linux.html
-   https://www.gnu.org/software/emacs/manual/html_node/emacs/
-      
+http://www.raspberrypi.org/documentation/installation/installing-images/
+http://supercollider.github.io/development/building-raspberrypi.html
+http://sourceforge.net/p/supercollider/supercollider/ci/master/tree/editors/scel/
+http://doc.sccode.org/Classes/Server.html
+http://chrisperkins.blogspot.gr/2011/07/building-emacs-24.html
+http://ergoemacs.org/emacs/building_emacs_on_linux.html
+https://www.gnu.org/software/emacs/manual/html_node/emacs/

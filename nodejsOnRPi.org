@@ -2,68 +2,80 @@
 
 ** GET THE LATEST VERSION OF NODE.JS
 
-     wget http://nodejs.org/dist/latest/node-v0.10.35.tar.gz # check if this is the latest version, if not replace it with the correct one.
-     tar -xvzf node-v0.10.35.tar.gz
-     cd node-v0.10.35
-     ./configure
-   If you get an error in this step (Node.js configure error: No acceptable C compiler found!), do this:
-     ln -s /usr/bin/gcc /usr/bin/cc
-   Then continue:
-     make # this takes A LOT of time
-     sudo make install
+#+BEGIN_SRC sh
+wget http://nodejs.org/dist/latest/node-v0.10.35.tar.gz # check if this is the latest version, if not replace it with the correct one.
+tar -xvzf node-v0.10.35.tar.gz
+cd node-v0.10.35
+./configure
+#+END_SRC
 
-   That' s all - Now check versions:
-     node -v
-     npm -v
+If in this step you get the error: =Node.js configure error: No acceptable C compiler found!=, evaluate:
 
-** HELLO WORLD - NODE SERVER
+: ln -s /usr/bin/gcc /usr/bin/cc
 
-   Open emacs and make a new file named "node-server.js".
-   Put inside the following code:
+Then continue:
 
-     var http = require('http');
+: make # this takes A LOT of time
+: sudo make install
 
-     http.createServer(function(req, res) {
-       res.end('Hello, RaspberryPi')
-     }).listen(8080);
+Now check versions:
 
-   Then save, exit and run the command:
-     node node-server.js
+: node -v
+: npm -v
 
-   Open up a browser and type in the address bar the raspberry's ip and the port (in this case 8080) like so:
-     192.168.1.x:8080
+** NODE.JS' "HELLO WORLD" - NODE SERVER
 
-   If everything is ok, you should see the message 'Hello, RaspberryPi'
+Open emacs and make a new file named =node-server.js=.
+Put inside the following code:
+
+#+BEGIN_SRC javascript
+var http = require('http');
+
+http.createServer(function(req, res) {
+    res.end('Hello, RaspberryPi')
+}).listen(8080);
+#+END_SRC
+
+Then save, exit and run the command:
+
+: node node-server.js
+
+Open up a browser and type in the address bar the raspberry's ip and the port (in this case 8080) like so:
+=192.168.1.x:8080=
+
+If everything is ok, you should see the message =Hello, RaspberryPi=.
 
 ** USE BELOI OSC TO COMMUNICATE WITH SUPERCOLLIDER
   
-     git clone https://github.com/iani/sc-kubrik.git
-     cd sc-kubrik/webosc
-     emacs config.json
+: git clone https://github.com/iani/sc-kubrik.git
+: cd sc-kubrik/webosc
+: emacs config.json
 
-   In this file you shoeuld change the osc out port to be 57120 (the port which sclang listens to). You could also change the ip if you are sending in a remote machine.
+In this file you should change the osc out port to be 57120 (the port which sclang listens to). You could also change the ip if you are sending in a remote machine.
   
-     cd public/js
-     emacs script.js
+: cd public/js
+: emacs script.js
 
-   In this file you can rename the sliders' path names to suit your needs.
-   When you' re done with everything, go back to the webosc directory and execute:
-     node index.js
+In this file you can rename the sliders' path names to suit your needs.
+When you' re done with everything, go back to the webosc directory and execute:
 
-   Wait for Beloi OSC to start, then open up a browser in a remote machine connected to your network, and type in the address bar:
-     192.168.1.0:8080 # replace this ip with your own, but keep the port
+: node index.js
 
-   Now you can use the faders to send OSC messages to the RPi.
-   Now open a new terminal and start supercollider. To receive the osc messages, create an OSCdef listening to the right path.
+Wait for Beloi OSC to start, then open up a browser in a remote machine connected to your network, and type in the address bar:
+: 192.168.1.0:8080 # replace this ip with your own, but keep the port
+
+Now you can use the faders to send OSC messages to the RPi.
+
+Now open a new terminal and start supercollider. To receive the osc messages, create an OSCdef listening to the right path.
   
 ** SOME EXTRAS
 
-   sudo apt-get install screen #this is very useful if using ssh - you can termiate the connection but whatever process you were running is still running.
+: sudo apt-get install screen # this is very useful if using ssh - you can termiate the connection but whatever process you were running is still running.
 
 ** READINGS
 
-   http://nodejs.org/dist/latest/
-   http://elinux.org/Node.js_on_RPi
-   https://www.youtube.com/watch?v=J6g53Hm0rq4
-   http://stackoverflow.com/questions/11696162/node-js-install-synology-ds212-error
+http://nodejs.org/dist/latest/
+http://elinux.org/Node.js_on_RPi
+https://www.youtube.com/watch?v=J6g53Hm0rq4
+http://stackoverflow.com/questions/11696162/node-js-install-synology-ds212-error
   
