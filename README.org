@@ -1,10 +1,10 @@
 * RASPBERRY PI AS AN INTERACTIVE MUSIC SYSTEM
----------------------------------------------
+
 In this project I use SuperCollider, Emacs, Node.js and the OSC protocol to turn a Raspberry Pi into an interactive music system.
 
 The project is divided in three sections, presented separately:
 
-    1. Installation of the latest version of SuperCollider (3.7 alpha at the time of writing), installation of the latest version of emacs (24.3 at the time of wriring) and configuration to use them without graphical interface.
+    1. Installation of the latest version of SuperCollider (3.7 alpha at the time of writing), installation of the latest version of emacs (24.4 at the time of wriring) and configuration to use them without graphical interface.
 
     2. Installation of the latest version of Node.js (0.10.35 at the time of writing) and basic usage of the WebOsc project (Beloi OSC) as a browser-based OSC controller.
 
@@ -16,17 +16,29 @@ Topics also covered:
     - Remote access to the Raspberry Pi with SSH
 
 * ELECTRONIC RESOURCES
-----------------------
+
+Here are all the resources that I used for this project, from all three sections:
 
 http://www.raspberrypi.org/documentation/installation/installing-images/
+
 http://supercollider.github.io/development/building-raspberrypi.html
+
 http://sourceforge.net/p/supercollider/supercollider/ci/master/tree/editors/scel/
+
 http://doc.sccode.org/Classes/Server.html
+
 http://chrisperkins.blogspot.gr/2011/07/building-emacs-24.html
+
 http://ergoemacs.org/emacs/building_emacs_on_linux.html
+
 https://www.gnu.org/software/emacs/manual/html_node/emacs/
+
 http://nodejs.org/dist/latest/
+
 http://elinux.org/Node.js_on_RPi
+
 https://www.youtube.com/watch?v=J6g53Hm0rq4
+
 http://stackoverflow.com/questions/11696162/node-js-install-synology-ds212-error
+
 http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
