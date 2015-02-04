@@ -24,7 +24,7 @@ Install emacs dependencies:
 
 : sudo apt-get install build-essential
 
-Optional dependencies (for x-window and jpeg, gif, tiff support - mostly if you intend to use emacs with a graphical interface):
+Optional emacs dependencies (for x-window and jpeg, gif, tiff support - mostly if you intend to use emacs with a graphical interface):
 
 : sudo apt-get install libgtk2.0-dev libxpm-dev libjpeg-dev libgif-dev libtiff4-dev
 
