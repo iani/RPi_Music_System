@@ -47,8 +47,8 @@ If everything is ok, you should see the message =Hello, RaspberryPi=.
 
 ** USE BELOI OSC TO COMMUNICATE WITH SUPERCOLLIDER
   
-: git clone https://github.com/iani/sc-kubrik.git
-: cd sc-kubrik/webosc
+: git clone https://github.com/iani/sc-kubik.git
+: cd sc-kubik/webosc
 : emacs config.json
 
 In this file you should change the osc out port to be 57120 (the port which sclang listens to). You could also change the IP if you are sending in a remote machine.
