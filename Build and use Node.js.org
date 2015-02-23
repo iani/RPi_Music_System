@@ -3,9 +3,9 @@
 ** GET THE LATEST VERSION OF NODE.JS
 
 #+BEGIN_SRC sh
-wget http://nodejs.org/dist/latest/node-v0.10.35.tar.gz # check if this is the latest version, if not replace it with the correct one.
-tar -xvzf node-v0.10.35.tar.gz
-cd node-v0.10.35
+wget http://nodejs.org/dist/latest/node-vxx.xx.xx.tar.gz # replace xx.xx.xx with the latest version found in http://nodejs.org/dist/latest
+tar -xvzf node-vxx.xx.xx.tar.gz
+cd node-vxx.xx.xx
 ./configure
 #+END_SRC
 
@@ -41,18 +41,18 @@ Then save, exit and run the command:
 : node node-server.js
 
 Open up a browser and type in the address bar the raspberry's IP and the port (in this case 8080) like so:
-=192.168.1.x:8080=
+=192.168.1.1:8080= (Replace this IP with your own)
 
 If everything is ok, you should see the message =Hello, RaspberryPi=.
 
 ** USE BELOI OSC TO COMMUNICATE WITH SUPERCOLLIDER
-  
+
 : git clone https://github.com/iani/sc-kubik.git
 : cd sc-kubik/webosc
 : emacs config.json
 
 In this file you should change the osc out port to be 57120 (the port which sclang listens to). You could also change the IP if you are sending in a remote machine.
-  
+
 : cd public/js
 : emacs script.js
 
@@ -67,7 +67,7 @@ Wait for Beloi OSC to start, then open up a browser in a remote machine connecte
 Now you can use the faders to send OSC messages to the RPi.
 
 Now open a new terminal and start supercollider. To receive the osc messages, create an OSCdef listening to the right path.
-  
+
 ** SOME EXTRAS
 
 : sudo apt-get install screen # this is very useful if using ssh - you can termiate the connection but whatever process you were running is still running.
