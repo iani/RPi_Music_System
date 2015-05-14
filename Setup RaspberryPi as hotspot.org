@@ -149,6 +149,8 @@ At this point everything should work, but only if your usb wi-fi dongle uses the
 
 : iwlist
 
+(Note: on =iwlist= see: http://manpages.ubuntu.com/manpages/karmic/man8/iwlist.8.html)
+
 If the output is =nl80211 not found=, then you need to use the "rtl871xdrv" driver.
 
 Open the file =/etc/hostapd/hostapd.conf= and comment out the line about the "nl80211" driver. Then uncomment the line about the "rtl871xdrv" driver.
