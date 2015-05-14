@@ -3,6 +3,8 @@
 The instructions are from the tutorial found here:
 http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
 
+Note: This site may also be useful: https://sendgrid.com/blog/complete-guide-set-raspberry-pi-without-keyboard-mouse/
+
 ** CONFIGURE THE WIRELESS ADAPTER WITH A STATIC IP ADDRESS
 
 Edit =/etc/network/interfaces= (the part about WAN) like this:
